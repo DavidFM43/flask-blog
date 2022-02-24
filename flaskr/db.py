@@ -8,8 +8,10 @@ from flask.cli import with_appcontext
 # Question: Is it better to put functions inside a module or inside a class?
 
 
+# Question: Does init_db get used without the command?
 def init_db():
     db = get_db()
+    # executes the .sql script for creating empty tables
     with current_app.open_resource('schema.sql') as f:
         db.executescript(f.read().decode('utf8'))
 
@@ -23,6 +25,8 @@ def init_db_command():
 
 
 def init_app(app):
+    """Registers the database methods with the application instance"""
+
     # call close_db after returning a response to a request
     app.teardown_appcontext(close_db)
     # adds new command that can be called with Flask
