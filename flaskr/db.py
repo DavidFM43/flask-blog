@@ -4,8 +4,11 @@ import click
 from flask import current_app, g
 from flask.cli import with_appcontext
 
-def get_db():
+# TODO: Maybe create a Database class to encapsulate this functions.
+# Question: Is it better to put some clases inside a module or inside a class? Namespaces?
 
+
+def get_db():
     # g is an object that handles requests information
     if 'db' not in g:
         # connect to database
