@@ -1,5 +1,5 @@
 """
-Blueprint for user-authentication related actions.
+Blueprint for user-authentication related views.
 """
 import functools
 
