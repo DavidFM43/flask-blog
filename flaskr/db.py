@@ -5,7 +5,21 @@ from flask import current_app, g
 from flask.cli import with_appcontext
 
 # TODO: Maybe create a Database class to encapsulate this functions.
-# Question: Is it better to put some clases inside a module or inside a class? Namespaces?
+# Question: Is it better to put functions inside a module or inside a class?
+
+
+def init_db():
+    db = get_db()
+    with current_app.open_resource('schema.sql') as f:
+        db.executescript(f.read().decode('utf8'))
+
+
+# create a command line command named 'init-db'
+@click.command('init-db')
+@with_appcontext
+def init_db_command():
+    init_db()
+    click.echo('Initialized the database.')
 
 
 def get_db():
