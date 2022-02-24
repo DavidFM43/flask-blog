@@ -22,6 +22,13 @@ def init_db_command():
     click.echo('Initialized the database.')
 
 
+def init_app(app):
+    # call close_db after returning a response to a request
+    app.teardown_appcontext(close_db)
+    # adds new command that can be called with Flask
+    app.cli.add_command(init_db_command)
+
+
 def get_db():
     # g is an object that handles requests information
     if 'db' not in g:
@@ -36,7 +43,7 @@ def get_db():
     return g.db
 
 
-def close_db():
+def close_db(e=None):
     db = g.pop('db', None)
 
     if db is not None:
