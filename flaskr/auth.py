@@ -14,7 +14,7 @@ from flaskr.db import get_db
 bp = Blueprint('auth', __name__, url_prefix='/auth')
 
 
-@bp.route('/register', methods=['GET', 'POST'])
+@bp.route('/register', methods=('GET', 'POST'))
 def register():
     """Registers the user in the database and redirects to login page if all conditions are validated."""
     if request.method == 'POST':
@@ -48,7 +48,7 @@ def register():
     return render_template('auth/register.html')
 
 
-@bp.route('/login', methods=['GET', 'POST'])
+@bp.route('/login', methods=('GET', 'POST'))
 def login():
     """Redirects to index page and saves user_id if the credentials are valid."""
     if request.method == 'POST':
