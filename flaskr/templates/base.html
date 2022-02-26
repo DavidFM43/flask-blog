@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <title>{% block title %}{% endblock %} - Flaskr</title>
 <link rel="stylesheet" href="{{ url_for('static', filename="style.css") }}">
 <nav>
@@ -7,7 +7,7 @@
         {% if g.user %}
             <li><span>{{ g.user["username"] }}</span></li>
             <li><a href="{{ url_for('auth.logout') }}">Log Out</a></li>
-            {% else %}
+        {% else %}
             <li><a href="{{ url_for('auth.register') }}">Register</a></li>
             <li><a href="{{ url_for('auth.login') }}">Login</a></li>
         {% endif %}
