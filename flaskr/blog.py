@@ -89,6 +89,7 @@ def delete(id):
 
 
 def get_post(id, check_author=True):
+    """Returns a user post given the post id if the post exists and the request user is post author"""
     post = get_db().execute(
         'SELECT p.id, title, body, created, author_id, username'
         ' FROM post p JOIN user u ON p.author_id = u.id'
@@ -96,7 +97,9 @@ def get_post(id, check_author=True):
         (id,)
     ).fetchone()
     if post is None:
+        # not found
         abort(404, f"Post id {id} doesn't exist.")
     if check_author and post['author_id'] != g.user['id']:
+        # forbidden
         abort(403)
     return post

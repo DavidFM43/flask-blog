@@ -14,7 +14,7 @@ def create_app(test_config=None):
         DATABASE=os.path.join(app.instance_path, 'flask.sqlite')
     )
 
-    # load config
+    # load test config if there is one
     if test_config:
         app.config.from_mapping(test_config)
     app.config.from_pyfile('config.py', silent=True)
@@ -24,7 +24,11 @@ def create_app(test_config=None):
         os.makedirs(app.instance_path)   
     except OSError:
         pass
-        
+
+    @app.route('/hello')
+    def hello():
+        return "Hola mundo"
+
     # register the database methods
     db.init_app(app)
 
