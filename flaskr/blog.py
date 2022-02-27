@@ -16,12 +16,14 @@ bp = Blueprint('blog', __name__)
 def index():
     """Index view shows all posts organized by creation date."""
     db = get_db()
+    # fetches all the posts from the database
     posts = db.execute(
         'SELECT p.id, title, body, created, author_id, username'
         ' FROM post p JOIN user u ON p.author_id = u.id'
         ' ORDER BY created DESC'
     ).fetchall()
     return render_template('blog/index.html', posts=posts)
+
 
 #TODO: Create a new view as a base for the create() and update() views.
 @bp.route('/create', methods=('GET', 'POST'))
@@ -45,14 +47,15 @@ def create():
                 (title, body, g.user['id'])
             )
             db.commit()
-            return redirect('blog.index')
+            return redirect(url_for('blog.index'))
 
-        return render_template('blog/create.html')
+    return render_template('blog/create.html')
 
 
 @bp.route('/<int:id>/update', methods=('GET', 'POST'))
 @login_required
 def update(id):
+    """Edits a post given its id."""
     post = get_post(id)
     if request.method == 'POST':
         title = request.form['title']
@@ -65,18 +68,19 @@ def update(id):
         else:
             db = get_db()
             db.execute(
-                'UPDATE post SET title = ? body = ?'
+                'UPDATE post SET title = ?, body = ?'
                 ' WHERE id = ?',
                 (title, body, id)
             )
             db.commit()
-            return redirect(url_for('blog/index'))
+            return redirect(url_for('blog.index'))
+    return render_template('blog/update.html', post=post)
 
-    render_template('blog/update.html', post=post)
-
-@bp.route('<int:id>/delete', methods=('POST',))
+# doesn't use a get method because there is no delete template
+@bp.route('/<int:id>/delete', methods=('POST',))
 @login_required
 def delete(id):
+    """Deletes a post given its id."""
     post = get_post(id)
     db = get_db()
     db.execute('DELETE FROM post WHERE id = ?', (id,))

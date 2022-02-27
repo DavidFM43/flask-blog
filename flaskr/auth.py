@@ -31,7 +31,7 @@ def register():
 
         if error is None:
             try:
-                # inserts user into the users database
+                # inserts user and hashed password into the users database
                 db.execute(
                     'INSERT INTO user (username, password) VALUES (?, ?)',
                     (username, generate_password_hash(password))
@@ -79,7 +79,7 @@ def login():
 
 
 # runs before each request
-@bp.before_request
+@bp.before_app_request
 def load_logged_in_user():
     """Loads user information for each request. If the user is logged in, queries its information from the table."""
     user_id = session.get('user_id')
@@ -88,7 +88,7 @@ def load_logged_in_user():
         g.user = None
     else:
         g.user = get_db().execute(
-            'SELECT * FROM user WHERE if = ?', (user_id,)
+            'SELECT * FROM user WHERE id = ?', (user_id,)
         ).fetchone()
 
 
@@ -104,7 +104,7 @@ def login_required(view):
     @functools.wraps(view)
     def wrapped_view(**kwargs):
         if g.user is None:
-            return redirect(url_for('auth/login'))
+            return redirect(url_for('auth.login'))
 
         return view(**kwargs)
 
