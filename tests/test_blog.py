@@ -12,9 +12,9 @@ def test_index(client, auth):
     response = client.get('/')
 
     assert b"Log Out" in response.data
-    assert b'test tittle' in response.data
+    assert b'test title' in response.data
     assert b'by test on 2022-01-01' in response.data
-    assert b'test/nbody' in response.data
+    assert b'test\nbody' in response.data
     assert b'href="/1/update"' in response.data
 
 
@@ -69,7 +69,7 @@ def test_create(client, auth, app):
 def test_update(client, auth, app):
     auth.login()
     # test template rendered successfully
-    assert client.get('/1/update') == 200
+    assert client.get('/1/update').status_code == 200
     client.post('/1/update', data={'title': 'updated', 'body': ''})
     with app.app_context():
         db = get_db()
@@ -79,13 +79,13 @@ def test_update(client, auth, app):
 
 
 @pytest.mark.parametrize('path', (
+    '/create',
     '/1/update',
-    '/create'
 ))
 def test_create_update_validate_input(client, auth, path):
     auth.login()
     response = client.post(path, data={'title': '', 'body': ''})
-    assert b"Title is required." in response.data
+    assert b'Title is required.' in response.data
 
 
 def test_delete(client, auth, app):
@@ -95,5 +95,5 @@ def test_delete(client, auth, app):
 
     with app.app_context():
         db = get_db()
-        post = db.execute('SELECT * FROM user where id = 1').fetchone()
+        post = db.execute('SELECT * FROM post where id = 1').fetchone()
         assert post is None

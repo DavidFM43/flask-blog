@@ -12,17 +12,18 @@ def test_register(client, app):
     # test redirection to login page
     assert 'http://localhost/auth/login' == response.headers['Location']
 
-    with app.appcontext():
+    with app.app_context():
         # test user has been saved on db
         assert get_db().execute(
             "SELECT * FROM user WHERE username = 'a'"
         ).fetchone() is not None
 
 
-@pytest.mark.parametrize(('username', 'password', 'message'),
+@pytest.mark.parametrize(('username', 'password', 'message'),(
                          ('', '', b'Username is required.'),
                          ('a', '', b'Password is required.'),
-                         ('test', 'test', 'User test is already taken.'))
+                         ('test', 'test', b'User test is already taken.'),
+))
 def test_register_validate_input(client, username, password, message):
     # test invalid registration data
     response = client.post('/auth/register',
@@ -44,9 +45,10 @@ def test_login(client, auth):
         assert g.user['username'] == 'test'
 
 
-@pytest.mark.parametrize(('username', 'password', 'message'),
+@pytest.mark.parametrize(('username', 'password', 'message'),(
                          ('a', 'test', b'Incorrect username.'),
-                         ('test', 'a', b'Incorrect password.'))
+                         ('test', 'a', b'Incorrect password.'),
+))
 def test_login_validate_input(auth, username, password, message):
     # test invalid login data
     response = auth.login(username, password)
