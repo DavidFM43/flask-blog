@@ -92,8 +92,8 @@ def delete(id):
 @bp.route('/<int:id>/show')
 def show(id):
     post = get_post(id, check_author=False)
-    # TODO: return to posts feature
     return render_template('blog/show.html', post=post)
+
 
 def get_post(id, check_author=True):
     """Returns a user post given the post id if the post exists and the request user is post author"""
