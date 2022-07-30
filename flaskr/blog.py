@@ -101,7 +101,8 @@ def show(id):
 
 
 def get_post(id, check_author=True):
-    """Returns a user post given the post id if the post exists and the request user is post author"""
+    """Returns a user post given the post id if the
+    post exists and the request user is post author"""
     post = (
         get_db()
         .execute(

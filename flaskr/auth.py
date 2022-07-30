@@ -23,7 +23,8 @@ bp = Blueprint("auth", __name__, url_prefix="/auth")
 
 @bp.route("/register", methods=("GET", "POST"))
 def register():
-    """Registers the user in the database and redirects to login page if all conditions are validated."""
+    """Registers the user in the database and redirects to
+    login page if all conditions are validated."""
     if request.method == "POST":
         username = request.form["username"]
         password = request.form["password"]
@@ -57,7 +58,8 @@ def register():
 
 @bp.route("/login", methods=("GET", "POST"))
 def login():
-    """Redirects to index page and saves user_id if the credentials are valid."""
+    """Redirects to index page and saves
+    user_id if the credentials are valid."""
     if request.method == "POST":
         username = request.form["username"]
         password = request.form["password"]
@@ -88,7 +90,8 @@ def login():
 # runs before each request
 @bp.before_app_request
 def load_logged_in_user():
-    """Loads user information for each request. If the user is logged in, queries its information from the table."""
+    """Loads user information for each request.
+    If the user is logged in, queries its information from the table."""
     user_id = session.get("user_id")
 
     if user_id is None:

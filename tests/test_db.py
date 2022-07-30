@@ -11,9 +11,9 @@ def test_get_close_db(app):
         assert db is get_db()
 
     with pytest.raises(sqlite3.ProgrammingError) as e:
-        db.execute('SELECT 1')
+        db.execute("SELECT 1")
     # database should be closed after a connection
-    assert 'closed' in str(e.value)
+    assert "closed" in str(e.value)
 
 
 def test_init_db_command(runner, monkeypatch):
@@ -26,8 +26,8 @@ def test_init_db_command(runner, monkeypatch):
 
     # mocks init_db() with fake_init_db()
     # as I don't actually want to call init_db()
-    monkeypatch.setattr('flaskr.db.init_db', fake_init_db)
-    result = runner.invoke(args=['init-db'])
+    monkeypatch.setattr("flaskr.db.init_db", fake_init_db)
+    result = runner.invoke(args=["init-db"])
 
-    assert 'Initialized' in result.output
+    assert "Initialized" in result.output
     assert Recorder.called
